@@ -2,12 +2,11 @@
   "name": "tcb-agent",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
+ "type": "module",
+"main": "src/index.js",
+"scripts": {
+  "start": "node src/index.js"
+}
   "engines": { "node": ">=18 <23" },
   "dependencies": {
     "fastify": "^4.28.1",
