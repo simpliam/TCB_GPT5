@@ -1,19 +1,19 @@
 {
-  "name": "tcb-agent",
+  "name": "tcb-agent-backend",
   "version": "1.0.0",
-  "description": "Agente inteligente dos Transportes Colectivos do Barreiro",
+  "description": "Backend do agente TCB com Fastify + RAG",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
     "migrate": "node scripts/migrate.js"
   },
   "dependencies": {
-    "fastify": "^4.28.1",
     "@fastify/cors": "^8.3.0",
-    "node-fetch": "^3.3.2"
+    "fastify": "^4.28.1",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.11.5"
   },
-  "engines": {
-    "node": ">=18"
-  }
+  "engines": { "node": ">=18" }
 }
+
