@@ -53,5 +53,39 @@ app.post("/api/chat", async (req, reply) => {
     const userText = contextBlock ? `${contextBlock}\n\nPergunta: ${message}` : message;
 
     const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model, temperature: 0.2,
+        messages: [
+          { role: "system", content: "És o agente dos TCB. Responde em PT-PT, curto e objetivo. Se não houver dados, diz isso sem inventar." },
+          { role: "user", content: userText }
+        ]
+      })
+    });
+
+    const data = await resp.json();
+    if (!resp.ok) {
+      req.log.error({ status: resp.status, data }, "Erro OpenAI");
+      return reply.code(502).send({ error: data?.error?.message || `Falha OpenAI (${resp.status})` });
+    }
+
+    return reply.send({
+      answer: data.choices?.[0]?.message?.content || "Sem resposta.",
+      usedModel: model,
+      contextUsed: snippets.map(s => ({ source: s.source }))
+    });
+  } catch (e) {
+    req.log.error(e);
+    return reply.code(500).send({ error: "Erro no servidor" });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen({ port: PORT, host: "0.0.0.0" })
+  .then(() => console.log(`Servidor a correr na porta ${PORT}`))
+  .catch(err => { console.error(err); process.exit(1); });
 
